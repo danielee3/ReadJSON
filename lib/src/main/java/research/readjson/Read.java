@@ -15,13 +15,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-/** Takes a JSON file and converts it to a Java LinkedHashMap. */
+/** Takes a JSON file and converts it to an instance of Java LinkedHashMap. */
 public class Read {
 	private URL url_string;
 	private String jsonString;
 	private JsonArray jsonArray;
 	private JsonObject jsonObject;
-	private boolean isJsonArray;
 	private ArrayList<Map<String, Object>> jsonList;
 	private LinkedHashMap<String, Object> jsonMap;
 	
@@ -67,21 +66,15 @@ public class Read {
 	/** Converts the String form of the JSON file into a Java data structure. */
 	public void toJsonElement() {
 		if (jsonString.charAt(0) == '[') { // JSON array
-			isJsonArray = true;
 			toArrayList();
 		} else { // JSON object
-			isJsonArray = false;
 			toLinkedHashMap();
 		}
 	}
 	
-	/** Returns true is the input JSON file is in a form of JSON array. */
-	public boolean isJsonArray() {
-		return isJsonArray;
-	}
-	
 	/** Returns the size of the input JSON array. */
 	public int arraySize() {
+		if (jsonArray == null) return 0;
 		return jsonArray.size();
 	}
 	

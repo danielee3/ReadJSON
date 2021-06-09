@@ -11,7 +11,7 @@ public class ReadTest {
 		String url_string = "https://raw.githubusercontent.com/aliciayuting/cascade/dfg/src/applications/demos/dairy_farm/dfgs.json";
 		Read readJSON = new Read(url_string);
 		readJSON.toJsonElement();
-		if (readJSON.isJsonArray()) {
+		if (readJSON.arraySize() > 0) {
 			ArrayList<Map<String, Object>> list = readJSON.getJsonList();
 			for (Object o:list) {
 				System.out.println(o);
