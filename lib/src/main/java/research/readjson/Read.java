@@ -15,7 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-/** Takes a JSON file and converts it to an instance of Java LinkedHashMap. */
+/** Takes a JSON file and converts it to Java data structures. */
 public class Read {
 	private URL url_string;
 	private String jsonString;
@@ -28,7 +28,10 @@ public class Read {
 	private Read() {
 	}
 	
-	/** Constructor: a Read object with an input JSON file converted to a Java String. */
+	/** 
+	 * Constructor: creates an instance of Read class with an input JSON file. The JSON file given as its url address then gets saved as a Java String. 
+	 * @param url_string the url address of the json file. 
+	 * */
 	public Read(String url_string) {
 		try {
 			this.url_string = new URL(url_string);
@@ -48,22 +51,31 @@ public class Read {
         }
 	}
 	
-	/** Returns a String form of the JSON file. */
+	/**
+	 * Returns the given JSON file as a String.  
+	 * @return a String form of the JSON file. 
+	 * */
 	public String getJsonString() {
 		return jsonString;
 	}
 	
-	/** Returns an ArrayList form of the JSON array. */
+	/** 
+	 * Returns the given JSON file as an ArrayList, when the given JSON element is a JSON array
+	 * @return an ArrayList form of the JSON array. 
+	 * */
 	public ArrayList<Map<String, Object>> getJsonList() {
 		return jsonList;
 	}
 	
-	/** Returns a LinkedHashMap form of the JSON object. */
+	/** 
+	 * Returns the given JSON file as a LinkedHashMap, when the given JSON element is a single JSON object or a JSON array of length one.
+	 * @return a LinkedHashMap form of the JSON object. 
+	 * */
 	public LinkedHashMap<String, Object> getJsonMap() {
 		return jsonMap;
 	}
 	
-	/** Converts the String form of the JSON file into a Java data structure. */
+	/** Execute the conversion of the JSON file into Java data structures. */
 	public void toJsonElement() {
 		if (jsonString.charAt(0) == '[') { // JSON array
 			toArrayList();
@@ -72,7 +84,10 @@ public class Read {
 		}
 	}
 	
-	/** Returns the size of the input JSON array. */
+	/** 
+	 * Returns the size of the input JSON array, or 0 if the given JSON file is not a JSON array but a single JSON object.
+	 * @return the size of the input JSON array. 
+	 * */
 	public int arraySize() {
 		if (jsonArray == null) return 0;
 		return jsonArray.size();
