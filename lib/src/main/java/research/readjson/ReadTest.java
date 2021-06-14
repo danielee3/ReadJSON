@@ -15,6 +15,7 @@ public class ReadTest {
 			ArrayList<Map<String, Object>> list = readJSON.getJsonList();
 			for (Object o:list) {
 				System.out.println(o);
+				System.out.println(readJSON.getGraph((Map)o));
 			}
 		} else {
 			LinkedHashMap<String, Object> map = readJSON.getJsonMap();

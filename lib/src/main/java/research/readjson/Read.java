@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -119,4 +119,16 @@ public class Read {
 	private void toJsonObject() {
 		jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
 	}
+	
+	/** 
+	 * Extracts the graph part from a JSON Object. 
+	 * @param obj a JSON object in the form of Map.
+	 * @return the graph in the form of ArrayList.
+	 * */
+	public ArrayList getGraph(Map obj) {
+		ArrayList list = (ArrayList) obj.get("graph");
+		return list;
+	}
+	
+	//TODO: Convert graph (Map) to Nodes and Edges
 }
