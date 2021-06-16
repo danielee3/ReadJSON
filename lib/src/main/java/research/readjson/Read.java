@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.LinkedTreeMap;
 
 /** Takes a JSON file and converts it to Java data structures. */
 public class Read {
@@ -23,6 +24,8 @@ public class Read {
 	private JsonObject jsonObject;
 	private ArrayList<Map<String, Object>> jsonList;
 	private LinkedHashMap<String, Object> jsonMap;
+	private HashMap<String, Node> nodes;
+	private HashMap<Node, Edge> edges;
 	
 	/** An empty constructor. */
 	private Read() {
@@ -130,5 +133,46 @@ public class Read {
 		return list;
 	}
 	
-	//TODO: Convert graph (Map) to Nodes and Edges
+	/**
+	 * 
+	 * @param graph
+	 */
+	public void graphToNodes(ArrayList graph) {
+		for (Object o:graph) {
+			LinkedTreeMap map = (LinkedTreeMap) o;
+			String pathname = map.get("object_pool_pathname").toString();
+			Node node = new Node(pathname);
+			nodes = new HashMap<>();
+			nodes.put(pathname, node);
+			Edge edge = graphToEdge(node, map);
+			edges = new HashMap<>();
+			edges.put(node, edge);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param node the Node from which Edge branches
+	 * @param map the LinkedTreeMap form of graph
+	 * @return the Edge that branches from the Node
+	 */
+	private Edge graphToEdge(Node node, LinkedTreeMap map) {
+		ArrayList logics = (ArrayList) map.get("data_path_logic_list");
+		HashMap<Node, String> destinations = new HashMap<>();
+		ArrayList dList = (ArrayList) map.get("destinations");
+		for (Object o:dList) {
+			Map dMap = (Map) o;
+			for (Object d:dMap.keySet()) {
+				String pathname = (String)d;
+				if (nodes.containsKey(pathname)) {
+					destinations.put(nodes.get(pathname), (String)dMap.get(d));
+				} else {
+					destinations.put(new Node(pathname), (String)dMap.get(d));
+				}
+			}
+		}
+		Edge edge = new Edge(node, logics, destinations);
+		return edge;
+		
+	}
 }
