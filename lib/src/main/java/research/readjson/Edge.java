@@ -43,5 +43,16 @@ public class Edge {
 			System.out.println("Destination removed.");
 		}
 	}
-
+	
+	public Node getNode() {
+		return node;
+	}
+	
+	public ArrayList getLogics() {
+		return logics;
+	}
+	
+	public HashMap getDestinations() {
+		return destinations;
+	}
 }

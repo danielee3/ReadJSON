@@ -138,14 +138,14 @@ public class Read {
 	 * @param graph
 	 */
 	public void graphToNodes(ArrayList graph) {
+		nodes = new HashMap<>();
+		edges = new HashMap<>();
 		for (Object o:graph) {
 			LinkedTreeMap map = (LinkedTreeMap) o;
 			String pathname = map.get("object_pool_pathname").toString();
 			Node node = new Node(pathname);
-			nodes = new HashMap<>();
 			nodes.put(pathname, node);
 			Edge edge = graphToEdge(node, map);
-			edges = new HashMap<>();
 			edges.put(node, edge);
 		}
 	}
@@ -167,12 +167,22 @@ public class Read {
 				if (nodes.containsKey(pathname)) {
 					destinations.put(nodes.get(pathname), (String)dMap.get(d));
 				} else {
-					destinations.put(new Node(pathname), (String)dMap.get(d));
+					Node newNode = new Node(pathname);
+					nodes.put(pathname, newNode);
+					destinations.put(newNode, (String)dMap.get(d));
 				}
 			}
 		}
 		Edge edge = new Edge(node, logics, destinations);
 		return edge;
 		
+	}
+	
+	public HashMap getNodes() {
+		return nodes;
+	}
+	
+	public HashMap getEdges() {
+		return edges;
 	}
 }
