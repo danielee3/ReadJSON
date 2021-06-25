@@ -1,6 +1,7 @@
 package research.readjson;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -18,7 +19,6 @@ import com.google.gson.internal.LinkedTreeMap;
 
 /** Takes a JSON file and converts it to Java data structures. */
 public class Read {
-	private URL url_string;
 	private String jsonString;
 	private JsonArray jsonArray;
 	private JsonObject jsonObject;
@@ -35,10 +35,9 @@ public class Read {
 	 * Constructor: creates an instance of Read class with an input JSON file. The JSON file given as its url address then gets saved as a Java String. 
 	 * @param url_string the url address of the json file. 
 	 * */
-	public Read(String url_string) {
+	public Read(URL url) {
 		try {
-			this.url_string = new URL(url_string);
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.url_string.openStream()));
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 		    StringBuilder stringBuilder = new StringBuilder();
 		    String inputLine;
 		    while ((inputLine = bufferedReader.readLine()) != null)
@@ -53,6 +52,31 @@ public class Read {
             e.printStackTrace();
         }
 	}
+	
+	/** 
+	 * Constructor: creates an instance of Read class with an input JSON file. The JSON file given as its file path then gets saved as a Java String. 
+	 * @param filepath the local file path of the json file.
+	 * */
+	public Read(String filepath) {
+		try {
+			//this.url_string = new URL(url_string);
+			FileReader fr = new FileReader(filepath);
+			BufferedReader bufferedReader = new BufferedReader(fr);
+		    StringBuilder stringBuilder = new StringBuilder();
+		    String inputLine;
+		    while ((inputLine = bufferedReader.readLine()) != null)
+		    {
+		        stringBuilder.append(inputLine);
+		        stringBuilder.append(System.lineSeparator());
+		    }
+
+		    bufferedReader.close();
+		    jsonString = stringBuilder.toString().trim();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+	}
+	
 	
 	/**
 	 * Returns the given JSON file as a String.  

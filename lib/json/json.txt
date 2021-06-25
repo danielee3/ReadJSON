@@ -1,0 +1,20 @@
+[
+      {
+        "object_pool_pathname": "/dairy_farm/front_end",
+        "destinations": [
+          {
+            "/dairy_farm/compute": "put",
+            "conditional": "no"
+          }
+        ]
+      },
+      {
+        "object_pool_pathname": "/dairy_farm/compute",
+        "destinations": [
+          {
+            "/dairy_farm/storage": "put",
+            "conditional": "no"
+          }
+        ]
+      }
+    ]
