@@ -52,7 +52,7 @@ public class Edge {
 		return logics;
 	}
 	
-	public HashMap getDestinations() {
+	public HashMap<Node, String> getDestinations() {
 		return destinations;
 	}
 }

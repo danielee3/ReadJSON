@@ -1,9 +1,5 @@
 package research.readjson;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,7 +47,7 @@ public class WriteTest {
         
         
         Write writeJSON = new Write();
-        writeJSON.saveFile(json);
+        writeJSON.saveFile(json, "json.json");
                 
 
     }

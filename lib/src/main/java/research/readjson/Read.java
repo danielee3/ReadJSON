@@ -28,7 +28,9 @@ public class Read {
 	private HashMap<Node, Edge> edges;
 	
 	/** An empty constructor. */
-	private Read() {
+	public Read() {
+		nodes = new HashMap<>();
+		edges = new HashMap<>();
 	}
 	
 	/** 
@@ -104,6 +106,11 @@ public class Read {
 	
 	/** Execute the conversion of the JSON file into Java data structures. */
 	public void toJsonElement() {
+		if (jsonString.length() == 0) {
+			nodes = new HashMap<>();
+			edges = new HashMap<>();
+			return;
+		}
 		if (jsonString.charAt(0) == '[') { // JSON array
 			toArrayList();
 		} else { // JSON object
@@ -162,10 +169,11 @@ public class Read {
 	 * @param graph
 	 */
 	public void graphToNodes(ArrayList graph) {
+		if (graph == null) return;
 		nodes = new HashMap<>();
 		edges = new HashMap<>();
 		for (Object o:graph) {
-			LinkedTreeMap map = (LinkedTreeMap) o;
+			Map map = (Map) o;
 			String pathname = map.get("object_pool_pathname").toString();
 			Node node = new Node(pathname);
 			nodes.put(pathname, node);
@@ -174,13 +182,18 @@ public class Read {
 		}
 	}
 	
+	public void graphToNodes() {
+		//When there is graph
+		//when there is not... make one!!
+	}
+	
 	/**
 	 * 
 	 * @param node the Node from which Edge branches
 	 * @param map the LinkedTreeMap form of graph
 	 * @return the Edge that branches from the Node
 	 */
-	private Edge graphToEdge(Node node, LinkedTreeMap map) {
+	private Edge graphToEdge(Node node, Map map) {
 		ArrayList logics = (ArrayList) map.get("data_path_logic_list");
 		HashMap<Node, String> destinations = new HashMap<>();
 		ArrayList dList = (ArrayList) map.get("destinations");
@@ -198,8 +211,55 @@ public class Read {
 			}
 		}
 		Edge edge = new Edge(node, logics, destinations);
-		return edge;
-		
+		return edge;	
+	}
+	
+	//TODO
+	public ArrayList<Map> EdgesToGraph() {
+		ArrayList<Map> list = new ArrayList<>();
+		for (Node node:edges.keySet()) {
+			LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+			map.put("object_pool_pathname", node.getPathname());
+			map.put("data_path_logic_list", edges.get(node).getLogics());
+			ArrayList<Object> destinationList = new ArrayList<>();
+			LinkedHashMap<String, String> destinations = new LinkedHashMap<>();
+			for (Node dn:edges.get(node).getDestinations().keySet()) {
+				//LinkedHashMap<String, String> destinations = new LinkedHashMap<>();
+				destinations.put(dn.getPathname(), edges.get(node).getDestinations().get(dn));
+				//destinationList.add(destinations);
+			}
+			destinationList.add(destinations);
+			map.put("destinations", destinationList);
+			list.add(map);
+		}
+		return list;
+	}
+	
+	public void addNode(Node node) {
+		nodes.put(node.getPathname(), node);
+	}
+	
+	public void addEdge(Node node, Node destination, ArrayList<String> logicList, String method) {
+		addNode(node);
+		addNode(destination);
+		if (edges.containsKey(node)) {
+			edges.get(node).addDestination(destination, method);
+		} else {
+			HashMap<Node, String> destinations = new HashMap<>();
+			Edge edge = new Edge(node, logicList, destinations);
+			edge.addDestination(destination, method);
+			edges.put(node, edge);
+		}
+	}
+	
+	public void deleteNode(Node node) {
+		nodes.remove(node.getPathname());
+		edges.remove(node);
+	}
+	
+	public void deleteNode(String pathname) {
+		edges.remove(nodes.get(pathname));
+		nodes.remove(pathname);
 	}
 	
 	public HashMap getNodes() {

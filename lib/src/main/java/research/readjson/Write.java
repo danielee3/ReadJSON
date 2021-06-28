@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ public class Write {
     	
     }
     
-    public String mapToJSON(Map map) {
+    public String toJSON(Map map) {
     	// Instantiate a new Gson instance.
         Gson gson= new GsonBuilder().setPrettyPrinting().create();
         // Convert the ordered map into an ordered string.
@@ -28,27 +27,35 @@ public class Write {
     	return json;
     }
     
-    public String listToJSON(List list) {
+    public String toJSON(List list) {
     	// Instantiate a new Gson instance.
         Gson gson= new GsonBuilder().setPrettyPrinting().create();
-        // Convert the ordered map into an ordered string.
+        // Convert the list of ordered maps into an ordered string.
         String json= gson.toJson(list, ArrayList.class);
     	return json;
     }
     
-    public void saveFile(String json) {
+    public void saveFile(String json, String filename) {
+        FileWriter fw;
+		try {
+			fw = new FileWriter("./json/"+filename, false);
+			BufferedWriter bw = new BufferedWriter(fw);
+	        bw.write(json);
+	        bw.close();
+	        System.out.println("Saved.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void saveLog(String json, String filename) {
     	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         FileWriter fw;
-        FileWriter history;
 		try {
-			fw = new FileWriter("./json/json.json", false);
-			history = new FileWriter("./json/"+timestamp.getTime() +".json", false);
+			fw = new FileWriter("./json/"+timestamp.getTime() +".json", false);
 			BufferedWriter bw = new BufferedWriter(fw);
-			BufferedWriter bwh = new BufferedWriter(history);
 	        bw.write(json);
-	        bwh.write(json);
 	        bw.close();
-	        bwh.close();
 	        System.out.println("Saved.");
 		} catch (IOException e) {
 			e.printStackTrace();
